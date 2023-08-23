@@ -1,0 +1,24 @@
+[ req ]
+prompt                 = no
+days                   = 3000
+distinguished_name     = req_distinguished_name
+req_extensions         = v3_req
+
+
+[ req_distinguished_name ]
+countryName            = RU
+stateOrProvinceName    = RU
+localityName           = RU
+organizationName       = SELF
+organizationalUnitName = SELF
+commonName             = example.com
+emailAddress           = example@example.com
+
+[ v3_req ]
+basicConstraints       = CA:false
+extendedKeyUsage       = clientAuth
+subjectAltName         = @sans
+
+[ sans ]
+DNS.0 = localhost
+DNS.1 = myexampleclient.com
