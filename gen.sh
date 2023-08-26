@@ -52,7 +52,7 @@ if [[ $1 == "gencert" ]]; then
 
 	echo "Generate client certificate ...";
 	openssl x509 -req -in ${OUT_FILE_NAME}.csr -CA $CA_CERT -CAkey $CA_KEY -CAcreateserial -out "${OUT_FILE_NAME}.crt" -days \
-	$DAYS -sha256 -extfile client.cnf -passin pass:$CA_PASS;
+	$DAYS -sha256 -extfile client.cnf -extensions v3_ca -passin pass:$CA_PASS;
 
 	echo "Done.";
 	exit 0;

@@ -1,24 +1,16 @@
-[ req ]
-prompt                 = no
-days                   = 3000
-distinguished_name     = req_distinguished_name
-req_extensions         = v3_req
+[dn]
+CN=localhost
 
+[req]
+distinguished_name = dn
+prompt = no
+req_extensions = v3_ca
 
-[ req_distinguished_name ]
-countryName            = RU
-stateOrProvinceName    = RU
-localityName           = RU
-organizationName       = SELF
-organizationalUnitName = SELF
-commonName             = example.com
-emailAddress           = example@example.com
+[alt_names]
+DNS.1 = local.proxmox.ru
+IP.1 = 192.168.1.11
 
-[ v3_req ]
-basicConstraints       = CA:false
-extendedKeyUsage       = clientAuth
-subjectAltName         = @sans
-
-[ sans ]
-DNS.0 = localhost
-DNS.1 = myexampleclient.com
+[v3_ca]
+subjectAltName=@alt_names
+keyUsage=digitalSignature
+extendedKeyUsage=serverAuth
