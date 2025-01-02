@@ -35,6 +35,10 @@ if [[ $1 == "genca" ]]; then
 	openssl genrsa -des3 -out $CA_KEY_PATH -passout pass:$2 2048;
 	echo "Generate root CA certificate ...";
 	openssl req -x509 -new -nodes -key $CA_KEY_PATH -sha256 -days $DAYS -out $CA_CRT_PATH -passin pass:$2 -config ./root.cnf;
+
+    echo -e "\e[41mCertificate ${CA_CRT_PATH} settings:\e[0m"
+    openssl x509 -noout -subject -issuer -ext subjectAltName -in ${CA_CRT_PATH}
+
 	exit 0;
 fi
 
@@ -53,6 +57,9 @@ if [[ $1 == "gencert" ]]; then
 	echo "Generate client certificate ...";
 	openssl x509 -req -in ${OUT_FILE_NAME}.csr -CA $CA_CERT -CAkey $CA_KEY -CAcreateserial -out "${OUT_FILE_NAME}.crt" -days \
 	$DAYS -sha256 -extfile client.cnf -extensions v3_ca -passin pass:$CA_PASS;
+
+    echo -e "\e[41mCertificate ${OUT_FILE_NAME}.crt settings:\e[0m"
+    openssl x509 -noout -subject -issuer -ext subjectAltName  -in ${OUT_FILE_NAME}.crt
 
 	echo "Done.";
 	exit 0;

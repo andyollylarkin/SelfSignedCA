@@ -20,5 +20,4 @@ extendedKeyUsage       = clientAuth
 subjectAltName         = @sans
 
 [ sans ]
-DNS.0 = localhost
-DNS.1 = myexampleclient.com
+IP.0 = 195.133.197.8
