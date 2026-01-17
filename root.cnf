@@ -1,23 +1,20 @@
 [ req ]
-prompt                 = no
-days                   = 3000
-distinguished_name     = req_distinguished_name
-req_extensions         = v3_req
-
+prompt             = no
+distinguished_name = req_distinguished_name
+x509_extensions    = v3_ca
+days               = 3650
 
 [ req_distinguished_name ]
-countryName            = RU
-stateOrProvinceName    = RU
-localityName           = RU
-organizationName       = SELF
-organizationalUnitName = SELF
-commonName             = example.com
-emailAddress           = example@example.com
+C  = RU
+ST = Moscow
+L  = Moscow
+O  = SELF
+OU = CA
+CN = skala-r.loc Root CA
 
-[ v3_req ]
-basicConstraints       = CA:false
-extendedKeyUsage       = clientAuth
-subjectAltName         = @sans
+[ v3_ca ]
+basicConstraints = critical, CA:TRUE, pathlen:0
+keyUsage         = critical, keyCertSign, cRLSign
+subjectKeyIdentifier = hash
+authorityKeyIdentifier = keyid:always,issuer:always
 
-[ sans ]
-IP.0 = 195.133.197.8

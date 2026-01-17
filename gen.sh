@@ -43,24 +43,33 @@ if [[ $1 == "genca" ]]; then
 fi
 
 if [[ $1 == "gencert" ]]; then
-	CA_CERT="$2";
-	CA_KEY="$3";
-	CA_PASS="$4";
-	OUT_FILE_NAME="$5";
+    CA_CERT="$2"
+    CA_KEY="$3"
+    CA_PASS="$4"
+    OUT_FILE_NAME="$5"
+    DOMAIN="$5"
+    echo "Generate server key ..."
+    openssl genrsa -out "${OUT_FILE_NAME}.key" 2048
 
-	echo "Generate client key ...";
-	openssl genrsa -out "${OUT_FILE_NAME}.key" 2048;
+    sed -i '' "s/^\(DNS\.1 = \).*/\1${DOMAIN}/" ./client.cnf
+    sed -i '' "s/^\(CN = \).*/\1${DOMAIN}/" ./client.cnf
 
-	echo "Generate client csr ...";
-	openssl req -new -key "${OUT_FILE_NAME}.key" -out "${OUT_FILE_NAME}.csr" -config client.cnf;
 
-	echo "Generate client certificate ...";
-	openssl x509 -req -in ${OUT_FILE_NAME}.csr -CA $CA_CERT -CAkey $CA_KEY -CAcreateserial -out "${OUT_FILE_NAME}.crt" -days \
-	$DAYS -sha256 -extfile client.cnf -extensions v3_ca -passin pass:$CA_PASS;
+    echo "Generate server csr ..."
+    openssl req -new -key "${OUT_FILE_NAME}.key" -out "${OUT_FILE_NAME}.csr" -config client.cnf
+
+    echo "Generate server certificate ..."
+    openssl x509 -req \
+        -in "${OUT_FILE_NAME}.csr" \
+        -CA "$CA_CERT" -CAkey "$CA_KEY" -CAcreateserial \
+        -out "${OUT_FILE_NAME}.crt" \
+        -days $DAYS -sha256 \
+        -extfile client.cnf -extensions v3_req \
+        -passin pass:"$CA_PASS"
 
     echo -e "\e[41mCertificate ${OUT_FILE_NAME}.crt settings:\e[0m"
-    openssl x509 -noout -subject -issuer -ext subjectAltName  -in ${OUT_FILE_NAME}.crt
-
-	echo "Done.";
-	exit 0;
+    openssl x509 -noout -subject -issuer -ext subjectAltName -in "${OUT_FILE_NAME}.crt"
+    echo "Done."
+    exit 0
 fi
+

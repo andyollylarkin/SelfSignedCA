@@ -1,15 +1,18 @@
-[dn]
-CN=195.133.197.8
-
-[req]
+[ req ]
 distinguished_name = dn
 prompt = no
-req_extensions = v3_ca
+req_extensions = v3_req
 
-[alt_names]
-IP.0 = 195.133.197.8
+[ dn ]
+CN = client.skala-r.loc
 
-[v3_ca]
-subjectAltName=@alt_names
-keyUsage=digitalSignature
-extendedKeyUsage=serverAuth
+[ v3_req ]
+subjectAltName = @alt_names
+basicConstraints = CA:FALSE
+keyUsage = critical, digitalSignature, keyEncipherment
+extendedKeyUsage = serverAuth
+
+[ alt_names ]
+DNS.1 = client.skala-r.loc
+IP.1  = 192.168.191.156
+
